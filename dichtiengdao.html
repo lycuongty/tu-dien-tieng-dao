@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dịch Tiếng Dao</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --red:    #e63946;
+  --navy:   #1d3557;
+  --yellow: #ffb703;
+  --green:  #2a9d8f;
+  --orange: #f4a261;
+  --bg:     #f8f9fa;
+  --dark:   #2b2d42;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Lexend', sans-serif; }
+body { background: var(--bg); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 10px; }
+.phone { width: 100%; max-width: 480px; background: #fff; border-radius: 28px; box-shadow: 0 10px 40px rgba(0,0,0,0.12); overflow: hidden; display: flex; flex-direction: column; }
+header { background: linear-gradient(135deg, var(--red), #b71c1c); color: #fff; padding: 24px 20px 20px; text-align: center; }
+header h1 { font-size: 24px; font-weight: 700; letter-spacing: 1px; text-shadow: 1px 2px 6px rgba(0,0,0,0.25); }
+header p  { font-size: 11px; opacity: .85; margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+.trans-section { padding: 16px 15px 0; }
+.lang-bar { display: flex; align-items: center; justify-content: space-between; background: #f1f3f5; border-radius: 14px; padding: 10px 16px; margin-bottom: 14px; }
+.lang-name { font-weight: 700; color: var(--navy); font-size: 15px; flex: 1; text-align: center; }
+.swap-btn { width: 38px; height: 38px; background: var(--yellow); border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--navy); box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: transform .2s; flex-shrink: 0; }
+.swap-btn:active { transform: rotate(180deg) scale(.9); }
+.input-wrap { position: relative; margin-bottom: 10px; }
+textarea { width: 100%; height: 100px; border: 2px solid #e2e8f0; border-radius: 16px; padding: 12px 44px 12px 14px; font-size: 15px; resize: none; outline: none; color: var(--dark); transition: border-color .2s; }
+textarea:focus { border-color: var(--red); }
+.output-box { width: 100%; min-height: 100px; background: #f8f9fa; border: 2px dashed var(--green); border-radius: 16px; padding: 12px 44px 12px 14px; font-size: 16px; font-weight: 600; color: var(--navy); word-break: break-word; line-height: 1.5; }
+.output-placeholder { color: #a0aec0; font-weight: 400; font-size: 14px; }
+.speak-btn { position: absolute; right: 12px; bottom: 12px; background: none; border: none; font-size: 18px; color: #a0aec0; cursor: pointer; padding: 5px; transition: color .2s; }
+.speak-btn:hover { color: var(--red); }
+.translate-btn { width: 100%; background: linear-gradient(90deg, var(--green), #1b7a6f); color: #fff; border: none; padding: 14px; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; margin: 6px 0 18px; box-shadow: 0 4px 14px rgba(42,157,143,.3); transition: transform .15s; letter-spacing: .3px; }
+.translate-btn:active { transform: scale(.98); }
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 15px 20px; }
+.menu-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 20px 10px; border-radius: 18px; text-decoration: none; color: #fff; font-weight: 600; font-size: 14px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform .15s; }
+.menu-item:active { transform: scale(.95); }
+.menu-item i { font-size: 26px; }
+.m-tudien  { background: linear-gradient(135deg, #ff9f43, #ff6b6b); }
+.m-vanhoa  { background: linear-gradient(135deg, #10ac84, #1dd1a1); }
+.m-video   { background: linear-gradient(135deg, #2e86de, #54a0ff); }
+.m-thongtin{ background: linear-gradient(135deg, #5f27cd, #341f97); }
+footer { text-align: center; padding: 14px; font-size: 11px; color: #adb5bd; background: #f8f9fa; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <header>
+    <h1>DỊCH TIẾNG DAO</h1>
+    <p>Ứng dụng học tập và bảo tồn ngôn ngữ Dao</p>
+  </header>
+  <div class="trans-section">
+    <div class="lang-bar">
+      <span class="lang-name" id="lb-src">Tiếng Việt</span>
+      <button class="swap-btn" onclick="swapLang()" title="Đổi chiều dịch">
+        <i class="fa-solid fa-right-left"></i>
+      </button>
+      <span class="lang-name" id="lb-dst">Tiếng Dao</span>
+    </div>
+    <div class="input-wrap">
+      <textarea id="txt-src" placeholder="Nhập từ cần dịch..."></textarea>
+      <button class="speak-btn" onclick="speakSrc()" title="Nghe">
+        <i class="fa-solid fa-volume-high"></i>
+      </button>
+    </div>
+    <button class="translate-btn" onclick="doTranslate()">
+      <i class="fa-solid fa-language"></i>&nbsp; Dịch Ngay
+    </button>
+    <div class="input-wrap">
+      <div class="output-box" id="txt-dst">
+        <span class="output-placeholder">Kết quả dịch hiển thị ở đây...</span>
+      </div>
+      <button class="speak-btn" onclick="speakDst()" title="Nghe kết quả">
+        <i class="fa-solid fa-volume-high"></i>
+      </button>
+    </div>
+  </div>
+  <div class="menu-grid">
+    <a href="tudien-tiengDao.html" class="menu-item m-tudien">
+      <i class="fa-solid fa-book-open"></i>Từ Điển
+    </a>
+    <a href="vanhoa-Dao.html" class="menu-item m-vanhoa">
+      <i class="fa-solid fa-masks-theater"></i>Văn Hóa Dao
+    </a>
+    <a href="videoDao.html" class="menu-item m-video">
+      <i class="fa-solid fa-circle-play"></i>Video Người Dao
+    </a>
+    <a href="thongtin-tacgia.html" class="menu-item m-thongtin">
+      <i class="fa-solid fa-circle-info"></i>Thông Tin
+    </a>
+  </div>
+  <footer>© 2026 Phần mềm Dịch Tiếng Dao – Phát triển vì cộng đồng</footer>
+</div>
+
+<script>
+var DEFAULT_DATA = [
+  { "vi": "ăn cơm", "dao": "Nhin nằng", "audio": "an_com.mp3" },
+  { "vi": "đi học", "dao": "Ning ho đăng", "audio": "di_hoc.mp3" },
+  { "vi": "đau", "dao": "mủn", "audio": "đau.mp3" },
+  { "vi": "tôi", "dao": "Dá", "audio": "tôi.mp3" },
+  { "vi": "bố", "dao": "pà/pha", "audio": "bố.mp3" }
+];
+
+var cachedDict = [];
+
+function loadDictionary() {
+  // SỬA GỐC: Ưu tiên đọc dữ liệu từ bộ nhớ Trình duyệt trước để không bao giờ bị mất từ khi F5
+  var localData = localStorage.getItem("dao_dict");
+  if (localData) {
+    try {
+      cachedDict = JSON.parse(localData);
+      return;
+    } catch(e) { console.error(e); }
+  }
+
+  // Nếu bộ nhớ trình duyệt trống, cố gắng đọc từ file json, nếu lỗi thì nạp dữ liệu mẫu
+  fetch('tudien.json?t=' + Date.now())
+    .then(function(res) { return res.json(); })
+    .then(function(data) { 
+      cachedDict = data;
+      localStorage.setItem("dao_dict", JSON.stringify(data));
+    })
+    .catch(function(e) { 
+      cachedDict = DEFAULT_DATA;
+    });
+}
+
+function getDictionary() {
+  return cachedDict.length > 0 ? cachedDict : DEFAULT_DATA;
+}
+
+var vietToDao = true;
+function swapLang() {
+  vietToDao = !vietToDao;
+  document.getElementById("lb-src").textContent = vietToDao ? "Tiếng Việt" : "Tiếng Dao";
+  document.getElementById("lb-dst").textContent = vietToDao ? "Tiếng Dao"  : "Tiếng Việt";
+  var srcEl = document.getElementById("txt-src");
+  var dstEl = document.getElementById("txt-dst");
+  var dstTxt = dstEl.dataset.value || "";
+  if (dstTxt) {
+    srcEl.value = dstTxt;
+    dstEl.innerHTML = '<span class="output-placeholder">Kết quả dịch hiển thị ở đây...</span>';
+    dstEl.dataset.value = ""; dstEl.dataset.audio = "";
+    doTranslate();
+  }
+}
+
+function doTranslate() {
+  var input = document.getElementById("txt-src").value.trim().toLowerCase();
+  var dstEl = document.getElementById("txt-dst");
+  if (!input) {
+    dstEl.innerHTML = '<span class="output-placeholder">Vui lòng nhập nội dung cần dịch.</span>';
+    dstEl.dataset.value = ""; dstEl.dataset.audio = "";
+    return;
+  }
+  var dict = getDictionary();
+  var result = null; var audioFile = "";
+
+  if (vietToDao) {
+    for (var i = 0; i < dict.length; i++) {
+      if (dict[i].vi.toLowerCase() === input) {
+        result = dict[i].dao; audioFile = dict[i].audio || "";
+        break;
+      }
+    }
+  } else {
+    for (var k = 0; k < dict.length; k++) {
+      if (dict[k].dao.toLowerCase() === input) {
+        result = dict[k].vi; audioFile = "";
+        break;
+      }
+    }
+  }
+
+  if (result) {
+    dstEl.textContent = result;
+    dstEl.dataset.value = result;
+    dstEl.dataset.audio = audioFile;
+  } else {
+    dstEl.innerHTML = '<span class="output-placeholder">[Chưa có từ này trong từ điển]</span>';
+    dstEl.dataset.value = ""; dstEl.dataset.audio = "";
+  }
+}
+
+function speakSrc() {
+  var text = document.getElementById("txt-src").value.trim();
+  if (!text) return;
+  if (vietToDao) { speakViet(text); } 
+  else {
+    var dict = getDictionary();
+    for (var i = 0; i < dict.length; i++) {
+      if (dict[i].dao.toLowerCase() === text.toLowerCase()) {
+        if (dict[i].audio) { playFile(dict[i].audio); return; }
+        break;
+      }
+    }
+    speakViet(text);
+  }
+}
+
+function speakDst() {
+  var dstEl = document.getElementById("txt-dst");
+  var val = dstEl.dataset.value || "";
+  if (!val) return;
+  if (vietToDao) {
+    var audio = dstEl.dataset.audio || "";
+    if (audio) { playFile(audio); return; }
+    speakViet(val);
+  } else { speakViet(val); }
+}
+
+function speakViet(text) {
+  if (!window.speechSynthesis) { alert("Trình duyệt không hỗ trợ phát âm."); return; }
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = "vi-VN"; u.rate = 0.9;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
+function playFile(fileName) {
+  if (!fileName) return;
+  var path = "AmThanh/" + fileName.trim();
+  new Audio(path).play().catch(function(e) { console.warn(e); });
+}
+
+document.getElementById("txt-src").addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); doTranslate(); }
+});
+window.onload = loadDictionary;
+</script>
+</body>
+</html>

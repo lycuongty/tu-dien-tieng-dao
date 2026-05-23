@@ -1,0 +1,52 @@
+[
+  {
+    "vi": "ăn cơm",
+    "dao": "Nhin nằng",
+    "audio": "an_com.mp3"
+  },
+  {
+    "vi": "đi học",
+    "dao": "Ning ho đăng",
+    "audio": "di_hoc.mp3"
+  },
+  {
+    "vi": "đau",
+    "dao": "mủn",
+    "audio": "đau.mp3"
+  },
+  {
+    "vi": "tôi yêu bạn",
+    "dao": "Dá thlẳn mây",
+    "audio": "tôi yêu bạn.mp3"
+  },
+  {
+    "vi": "bố",
+    "dao": "pà/pha",
+    "audio": "bố.mp3"
+  },
+  {
+    "vi": "chị gái",
+    "dao": "ô",
+    "audio": "chị gái.mp3"
+  },
+  {
+    "vi": "Tôi",
+    "dao": "Dá",
+    "audio": "Tôi.mp3"
+  },
+  {
+    "vi": "Mẹ",
+    "dao": "Zhì",
+    "audio": "mẹ.mp3"
+  },
+  {
+    "vi": "bạn là ai",
+    "dao": "Mây tói ta mản",
+    "audio": "bạn là ai.mp3"
+  },
+  {
+    "vi": "Không biết",
+    "dao": "má pẩy",
+    "audio": "không biết.mp3"
+  }
+]
