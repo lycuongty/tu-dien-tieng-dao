@@ -107,26 +107,48 @@ var DEFAULT_DATA = [
 
 var cachedDict = [];
 
-function loadDictionary() {
-  // SỬA GỐC: Ưu tiên đọc dữ liệu từ bộ nhớ Trình duyệt trước để không bao giờ bị mất từ khi F5
-  var localData = localStorage.getItem("dao_dict");
-  if (localData) {
-    try {
-      cachedDict = JSON.parse(localData);
-      return;
-    } catch(e) { console.error(e); }
-  }
+async function loadDictionary() {
 
-  // Nếu bộ nhớ trình duyệt trống, cố gắng đọc từ file json, nếu lỗi thì nạp dữ liệu mẫu
-  fetch('tudien.json?t=' + Date.now())
-    .then(function(res) { return res.json(); })
-    .then(function(data) { 
-      cachedDict = data;
-      localStorage.setItem("dao_dict", JSON.stringify(data));
-    })
-    .catch(function(e) { 
-      cachedDict = DEFAULT_DATA;
+  try {
+
+    const res = await fetch('tudien.json?t=' + Date.now(), {
+      cache: "no-store"
     });
+
+    const data = await res.json();
+
+    if (Array.isArray(data)) {
+
+      cachedDict = data;
+
+      // đồng bộ localStorage theo dữ liệu mới nhất
+      localStorage.setItem("dao_dict", JSON.stringify(data));
+
+    } else {
+
+      throw new Error("JSON không hợp lệ");
+    }
+
+  } catch(e) {
+
+    console.error(e);
+
+    // fallback nếu fetch lỗi
+    var localData = localStorage.getItem("dao_dict");
+
+    if (localData) {
+
+      try {
+        cachedDict = JSON.parse(localData);
+      } catch(err) {
+        cachedDict = DEFAULT_DATA;
+      }
+
+    } else {
+
+      cachedDict = DEFAULT_DATA;
+    }
+  }
 }
 
 function getDictionary() {
@@ -230,7 +252,9 @@ function playFile(fileName) {
 document.getElementById("txt-src").addEventListener("keydown", function(e) {
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); doTranslate(); }
 });
-window.onload = loadDictionary;
+window.onload = async function() {
+  await loadDictionary();
+};
 </script>
 </body>
 </html>
