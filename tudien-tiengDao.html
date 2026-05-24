@@ -200,7 +200,11 @@ function cloneArr(a) { return JSON.parse(JSON.stringify(a)); }
 function renderList() {
   var kw = g("inp-search").value.trim().toLowerCase();
   var box = g("vocab-list"); box.innerHTML = "";
-  var filtered = dict.filter(function(w) { return w.vi.toLowerCase().includes(kw) || w.dao.toLowerCase().includes(kw); });
+  var filtered = dict.filter(function(w) { 
+  return w.vi.toLowerCase().includes(kw) || 
+         w.dao.toLowerCase().includes(kw) ||
+         (w.topic && w.topic.toLowerCase().includes(kw));
+});
   if (filtered.length === 0) { box.innerHTML = '<div class="empty-msg">Không tìm thấy từ nào.</div>'; return; }
 
   filtered.forEach(function(w, fi) {
