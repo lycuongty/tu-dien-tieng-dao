@@ -2,27 +2,32 @@
   {
     "vi": "ăn cơm",
     "dao": "Nhin nằng",
-    "audio": "an_com.mp3"
+    "audio": "an_com.mp3",
+    "topic": "ăn uống"
   },
   {
     "vi": "đi học",
     "dao": "Ning ho đăng",
-    "audio": "di_hoc.mp3"
+    "audio": "di_hoc.mp3",
+    "topic": "học tập"
   },
   {
     "vi": "đau",
     "dao": "mủn",
-    "audio": "đau.mp3"
+    "audio": "đau.mp3",
+    "topic": "đời sống"
   },
   {
     "vi": "tôi yêu bạn",
     "dao": "Dá thlẳn mây",
-    "audio": "tôi yêu bạn.mp3"
+    "audio": "tôi yêu bạn.mp3",
+    "topic": "đời sống"
   },
   {
     "vi": "bố",
     "dao": "pà/pha",
-    "audio": "bố.mp3"
+    "audio": "bố.mp3",
+    "topic": "gia đình"
   },
   {
     "vi": "chị gái",
@@ -32,21 +37,25 @@
   {
     "vi": "Tôi",
     "dao": "Dá",
-    "audio": "Tôi.mp3"
+    "audio": "Tôi.mp3",
+    "topic": "xưng hô"
   },
   {
     "vi": "Mẹ",
     "dao": "Zhì",
-    "audio": "mẹ.mp3"
+    "audio": "mẹ.mp3",
+    "topic": "xưng hô"
   },
   {
     "vi": "bạn là ai",
     "dao": "Mây tói ta mản",
-    "audio": "bạn là ai.mp3"
+    "audio": "bạn là ai.mp3",
+    "topic": "giao tiếp"
   },
   {
     "vi": "Không biết",
     "dao": "má pẩy",
-    "audio": "không biết.mp3"
+    "audio": "không biết.mp3",
+    "topic": "giao tiếp"
   }
 ]
