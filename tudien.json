@@ -15,47 +15,66 @@
     "vi": "đau",
     "dao": "mủn",
     "audio": "đau.mp3",
-    "topic": "đời sống"
+    "topic": "cảm giác"
   },
   {
     "vi": "tôi yêu bạn",
     "dao": "Dá thlẳn mây",
     "audio": "tôi yêu bạn.mp3",
-    "topic": "đời sống"
+    "topic": "giao tiếp"
   },
   {
     "vi": "bố",
     "dao": "pà/pha",
     "audio": "bố.mp3",
-    "topic": "xưng hô"
+    "topic": "gia đình"
   },
   {
     "vi": "chị gái",
     "dao": "ô",
-    "audio": "chị gái.mp3"
+    "audio": "chị gái.mp3",
+    "topic": "gia đình"
   },
   {
     "vi": "Tôi",
     "dao": "Dá",
     "audio": "Tôi.mp3",
-    "topic": "xưng hô"
+    "topic": "bản thân"
   },
   {
     "vi": "Mẹ",
     "dao": "Zhì",
     "audio": "mẹ.mp3",
-    "topic": "xưng hô"
+    "topic": "gia đình"
   },
   {
     "vi": "bạn là ai",
     "dao": "Mây tói ta mản",
     "audio": "bạn là ai.mp3",
-    "topic": "giao tiếp"
+    "topic": "chào hỏi"
   },
   {
     "vi": "Không biết",
     "dao": "má pẩy",
     "audio": "không biết.mp3",
+    "topic": "giao tiếp"
+  },
+  {
+    "vi": "Vợ",
+    "dao": "Áu",
+    "audio": "vợ.mp3",
+    "topic": "gia đình"
+  },
+  {
+    "vi": "Chồng",
+    "dao": "lang",
+    "audio": "chồng.mp3",
+    "topic": "gia đình"
+  },
+  {
+    "vi": "ơi",
+    "dao": "lôi",
+    "audio": "ơi.mp3",
     "topic": "giao tiếp"
   }
 ]
