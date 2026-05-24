@@ -27,6 +27,7 @@ header h1 { font-size: 21px; font-weight: 700; }
 .word-vi  { font-size: 15px; font-weight: 700; color: var(--navy); }
 .word-dao { font-size: 14px; font-weight: 600; color: var(--red); margin-top: 2px; }
 .word-audio { font-size: 10px; color: #a0aec0; margin-top: 3px; font-style: italic; }
+.word-topic {font-size: 11px; color: #5f27cd; margin-top: 4px; font-weight: 700; }
 .has-audio { color: #2e7d32; } .no-audio { color: #e65100; }
 .word-actions { display: flex; gap: 5px; flex-shrink: 0; }
 .act-btn { width: 32px; height: 32px; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; }
@@ -102,6 +103,9 @@ header h1 { font-size: 21px; font-weight: 700; }
       <input class="f-input" type="text" id="inp-dao" placeholder="Tiếng Dao">
     </div>
     <div class="audio-input-wrap">
+    <input class="f-input" type="text" id="inp-topic" placeholder="Chủ đề (có thể bỏ trống)">
+    </div>
+    <div class="audio-input-wrap">
       <input class="f-input" type="text" id="inp-audio" placeholder="Tên file âm thanh (VD: an_com.mp3)">
       <div class="audio-hint" id="audio-hint"></div>
     </div>
@@ -113,11 +117,11 @@ header h1 { font-size: 21px; font-weight: 700; }
 
 <script>
 var DEFAULT_DATA = [
-  { "vi": "ăn cơm", "dao": "Nhin nằng", "audio": "an_com.mp3" },
-  { "vi": "đi học", "dao": "Ning ho đăng", "audio": "di_hoc.mp3" },
-  { "vi": "đau", "dao": "mủn", "audio": "đau.mp3" },
-  { "vi": "tôi", "dao": "Dá", "audio": "tôi.mp3" },
-  { "vi": "bố", "dao": "pà/pha", "audio": "bố.mp3" }
+  { "vi": "ăn cơm", "dao": "Nhin nằng", "audio": "an_com.mp3", "topic": "Ăn uống" },
+  { "vi": "đi học", "dao": "Ning ho đăng", "audio": "di_hoc.mp3", "topic": "Học tập" },
+  { "vi": "đau", "dao": "mủn", "audio": "đau.mp3", "topic": "Sức khỏe" },
+  { "vi": "tôi", "dao": "Dá", "audio": "tôi.mp3", "topic": "Đại từ" },
+  { "vi": "bố", "dao": "pà/pha", "audio": "bố.mp3", "topic": "Gia đình" }
 ];
 
 var dict = []; var editIdx = null; var recBlob = null; var recUrl = null; var mr = null;
@@ -204,12 +208,15 @@ function renderList() {
     var hasAudio = w.audio && w.audio.trim() !== "";
     var audClass = hasAudio ? "has-audio" : "no-audio";
     var audLabel = hasAudio ? '<i class="fa-solid fa-music"></i> ' + xe(w.audio) : '<i class="fa-solid fa-ban"></i> Chưa có âm thanh';
+    var topicLabel = w.topic && w.topic.trim() !== ""? '<div class="word-topic"># ' + xe(w.topic) + '</div>': '';
     var isEditing = origIdx === editIdx;
 
     var d = document.createElement("div");
     d.className = "word-item" + (isEditing ? " editing" : "");
     d.innerHTML = '<div class="word-index">' + (fi + 1) + '</div>' +
-      '<div class="word-body"><div class="word-vi">' + xe(w.vi) + '</div><div class="word-dao">&#10148; ' + xe(w.dao) + '</div><div class="word-audio ' + audClass + '">' + audLabel + '</div></div>' +
+      '<div class="word-body">' +
+'<div class="word-vi">' + xe(w.vi) + '</div>' +
+'<div class="word-dao">&#10148; ' + xe(w.dao) + '</div>' + topicLabel + '<div class="word-audio ' + audClass + '">' + audLabel + '</div>' + '</div>' +
       '<div class="word-actions">' +
         '<button class="act-btn btn-play" ' + (hasAudio ? '' : 'disabled') + ' onclick="playWord(' + origIdx + ')"><i class="fa-solid fa-volume-high"></i></button>' +
         '<button class="act-btn btn-edit" onclick="startEdit(' + origIdx + ')"><i class="fa-solid fa-pen"></i></button>' +
@@ -242,10 +249,16 @@ function toFileName(t) { if (!t) return ""; return t.normalize("NFD").replace(/[
 // SỬA ĐỔI: Tách biệt việc lưu vào trình duyệt và việc xuất/tải file JSON nền
 function saveWord() {
   var vi = g("inp-vi").value.trim(); var dao = g("inp-dao").value.trim(); var audio = g("inp-audio").value.trim();
+  var topic = g("inp-topic").value.trim();
   if (!vi || !dao) { toast("Nhập đủ chữ!"); return; }
   if (!audio) audio = toFileName(vi) + ".mp3";
   if (audio.indexOf(".") === -1) audio += ".mp3";
-  var w = { vi: vi, dao: dao, audio: audio };
+  var w = {
+  vi: vi,
+  dao: dao,
+  audio: audio,
+  topic: topic
+};
   if (editIdx === null) { dict.push(w); } else { dict[editIdx] = w; }
   
   saveLs(); // Lưu ngay vào bộ nhớ LocalStorage
@@ -261,10 +274,10 @@ function saveWord() {
   }, 500);
 }
 
-function startEdit(idx) { editIdx = idx; var w = dict[idx]; g("inp-vi").value = w.vi; g("inp-dao").value = w.dao; g("inp-audio").value = w.audio || ""; renderHint(); g("form-icon").className = "fa-solid fa-pen"; g("form-title-text").textContent = "Đang Sửa Từ"; g("btn-save").classList.add("edit-mode"); g("btn-save").innerHTML = '<i class="fa-solid fa-pen"></i> Cập Nhật'; g("cancel-link").classList.add("show"); renderList(); }
+function startEdit(idx) { editIdx = idx; var w = dict[idx]; g("inp-vi").value = w.vi; g("inp-dao").value = w.dao; g("inp-audio").value = w.audio || ""; g("inp-topic").value = w.topic || ""; renderHint(); g("form-icon").className = "fa-solid fa-pen"; g("form-title-text").textContent = "Đang Sửa Từ"; g("btn-save").classList.add("edit-mode"); g("btn-save").innerHTML = '<i class="fa-solid fa-pen"></i> Cập Nhật'; g("cancel-link").classList.add("show"); renderList(); }
 function deleteWord(idx) { if (confirm('Xóa từ?')) { dict.splice(idx, 1); saveLs(); resetForm(); renderList(); toast("Đã xóa."); } }
 function cancelEdit() { resetForm(); }
-function resetForm() { editIdx = null; g("inp-vi").value = ""; g("inp-dao").value = ""; g("inp-audio").value = ""; g("audio-hint").innerHTML = ""; hideEl("btn-preview"); hideEl("dl-box"); hideEl("rec-status"); hideEl("btn-stop"); g("btn-rec").classList.remove("on"); g("btn-rec").innerHTML = '<i class="fa-solid fa-circle"></i> Bắt đầu thu'; g("form-icon").className = "fa-solid fa-plus-circle"; g("form-title-text").textContent = "Thêm Từ Mới"; g("btn-save").classList.remove("edit-mode"); g("btn-save").innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Lưu Vào Từ Điển'; g("cancel-link").classList.remove("show"); renderList(); }
+function resetForm() { editIdx = null; g("inp-vi").value = ""; g("inp-dao").value = ""; g("inp-audio").value = ""; g("inp-topic").value = ""; g("audio-hint").innerHTML = ""; hideEl("btn-preview"); hideEl("dl-box"); hideEl("rec-status"); hideEl("btn-stop"); g("btn-rec").classList.remove("on"); g("btn-rec").innerHTML = '<i class="fa-solid fa-circle"></i> Bắt đầu thu'; g("form-icon").className = "fa-solid fa-plus-circle"; g("form-title-text").textContent = "Thêm Từ Mới"; g("btn-save").classList.remove("edit-mode"); g("btn-save").innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Lưu Vào Từ Điển'; g("cancel-link").classList.remove("show"); renderList(); }
 function g(id) { return document.getElementById(id); }
 function showEl(id) { g(id).style.display = "flex"; }
 function hideEl(id) { g(id).style.display = "none"; }
