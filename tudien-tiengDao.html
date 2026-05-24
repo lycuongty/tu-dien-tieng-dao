@@ -124,33 +124,56 @@ var dict = []; var editIdx = null; var recBlob = null; var recUrl = null; var mr
 
 // SỬA ĐỔI: Cơ chế nạp dữ liệu thông minh, tránh đè ngược dữ liệu cũ lên LocalStorage
 function init() {
-  var localData = localStorage.getItem("dao_dict");
-  if (localData) {
-    try {
-      dict = JSON.parse(localData);
-      renderList();
-      return;
-    } catch(e) { console.error(e); }
-  }
 
-  fetch('tudien.json?t=' + Date.now())
-    .then(function(res) { return res.json(); })
+  fetch('tudien.json?t=' + Date.now(), {
+    cache: "no-store"
+  })
+
+    .then(function(res) {
+      return res.json();
+    })
+
     .then(function(data) {
-      if (Array.isArray(data) && data.length > 0) {
+
+      // luôn ưu tiên dữ liệu mới từ GitHub
+      if (Array.isArray(data)) {
+
         dict = data;
+
+        // cập nhật localStorage theo dữ liệu mới
+        localStorage.setItem("dao_dict", JSON.stringify(dict));
+
+      } else {
+
+        // fallback nếu json lỗi
+        var localData = localStorage.getItem("dao_dict");
+
+        if (localData) {
+          dict = JSON.parse(localData);
+        } else {
+          dict = cloneArr(DEFAULT_DATA);
+        }
+      }
+
+      renderList();
+    })
+
+    .catch(function(e) {
+
+      console.error(e);
+
+      // nếu mất mạng thì dùng localStorage
+      var localData = localStorage.getItem("dao_dict");
+
+      if (localData) {
+        dict = JSON.parse(localData);
       } else {
         dict = cloneArr(DEFAULT_DATA);
       }
-      localStorage.setItem("dao_dict", JSON.stringify(dict));
-      renderList();
-    })
-    .catch(function(e) {
-      dict = cloneArr(DEFAULT_DATA);
-      localStorage.setItem("dao_dict", JSON.stringify(dict));
+
       renderList();
     });
 }
-
 function exportJsonFile() {
   var dataStr = JSON.stringify(dict, null, 2);
   var blob = new Blob([dataStr], { type: "application/json" });
